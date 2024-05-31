@@ -14,15 +14,7 @@ import Step3_Reservation from '@/components/steps/Step3_Reservation';
 import Step4_Payment from '@/components/steps/Step4_Payment';
 import Step5_OCR from '@/components/steps/Step5_OCR';
 import Visualizer from '@/components/speech-recognition/waveformgraph';
-import Loader from '@/components/loading';
-import styled from '@emotion/styled';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+import ReservationConfirm from '@/components/reservation-confirm';
 
 export default function Home() {
   // Chat GPT 응답
@@ -55,6 +47,7 @@ export default function Home() {
   ]);
   const [currentStep, setCurrentStep] = useState<number>(1);
   // todo: isProcessing 상태 추가
+  // todo: reservationConfirm 컴포넌트 props 변경(GPT search 응답)
 
   const stepTexts = {
     1: [
@@ -344,8 +337,7 @@ export default function Home() {
         onSpeakingChange={handleSpeakingChange}
       />
       <p style={{ marginTop: '20px' }}>응답: {answer}</p>
-      <p>출발지: {departure}</p>
-      <p>도착지: {destination}</p>
+      <ReservationConfirm departure={departure} destination={destination} departureTime={departureTime} />
     </main>
   );
 }
