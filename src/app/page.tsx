@@ -269,45 +269,45 @@ export default function Home() {
   }, [isSpeaking]);
 
   // Text-to-Speech 기능을 활용해서 Chat GPT의 응답을 음성으로 재생
-  // useEffect(() => {
-  //   async function streamResponse() {
-  //     if (answer) {
-  //       const response = await openai.audio.speech.create({
-  //         model: "tts-1",
-  //         voice: "fable",
-  //         input: answer,
-  //       });
-  //
-  //       const reader = response?.body?.getReader();
-  //       if (reader) {
-  //         const stream = new ReadableStream({
-  //           start(controller) {
-  //             function push() {
-  //               reader.read().then(({ done, value }) => {
-  //                 if (done) {
-  //                   controller.close();
-  //                   return;
-  //                 }
-  //                 controller.enqueue(value);
-  //                 push();
-  //               });
-  //             }
-  //
-  //             push();
-  //           },
-  //         });
-  //
-  //         const audioBlob = await new Response(stream).blob();
-  //         const audioUrl = URL.createObjectURL(audioBlob);
-  //         const audio = new Audio(audioUrl);
-  //         audio.playbackRate = 1.1;
-  //         audio.play();
-  //       }
-  //     }
-  //   }
-  //
-  //   streamResponse();
-  // }, [answer]);
+  useEffect(() => {
+    async function streamResponse() {
+      if (answer) {
+        const response = await openai.audio.speech.create({
+          model: "tts-1",
+          voice: "fable",
+          input: answer,
+        });
+
+        const reader = response?.body?.getReader();
+        if (reader) {
+          const stream = new ReadableStream({
+            start(controller) {
+              function push() {
+                reader.read().then(({ done, value }) => {
+                  if (done) {
+                    controller.close();
+                    return;
+                  }
+                  controller.enqueue(value);
+                  push();
+                });
+              }
+
+              push();
+            },
+          });
+
+          const audioBlob = await new Response(stream).blob();
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const audio = new Audio(audioUrl);
+          audio.playbackRate = 1.1;
+          audio.play();
+        }
+      }
+    }
+
+    streamResponse();
+  }, [answer]);
 
   const handleTranscriptChange = (newTranscript: string) => {
     setFinalTranscript(newTranscript);
