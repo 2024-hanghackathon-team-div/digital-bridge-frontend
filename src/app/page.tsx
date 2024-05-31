@@ -1,4 +1,5 @@
 'use client';
+import 'regenerator-runtime/runtime';
 import OpenAI from 'openai';
 import { useEffect, useState } from 'react';
 import { ChatCompletionMessageParam } from 'openai/resources';
