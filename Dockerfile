@@ -30,6 +30,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # 소스코드 복사
 COPY . .
 
+ARG NEXT_PUBLIC_OPENAI_API_KEY
+ENV NEXT_PUBLIC_OPENAI_API_KEY=$NEXT_PUBLIC_OPENAI_API_KEY
+
 # 소스코드 빌드
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
