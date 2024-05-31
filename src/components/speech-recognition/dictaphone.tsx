@@ -1,8 +1,18 @@
-"use client";
-import React, { useEffect } from "react";
+'use client';
+import React, { useEffect } from 'react';
 import SpeechRecognition, {
   useSpeechRecognition,
-} from "react-speech-recognition";
+} from 'react-speech-recognition';
+import styled from '@emotion/styled';
+import MicIcon from '@mui/icons-material/Mic';
+
+const ButtonBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+`;
 
 interface Props {
   onTranscriptChange: (transcript: string) => void;
@@ -10,7 +20,7 @@ interface Props {
 }
 
 const Dictaphone = ({ onTranscriptChange, onSpeakingChange }: Props) => {
-  const { finalTranscript, listening } = useSpeechRecognition();
+  const { finalTranscript, transcript, listening } = useSpeechRecognition();
 
   // 인식된 음성
   useEffect(() => {
@@ -23,13 +33,21 @@ const Dictaphone = ({ onTranscriptChange, onSpeakingChange }: Props) => {
   }, [onSpeakingChange, listening]);
 
   return (
-    <div>
-      <button onClick={() => SpeechRecognition.startListening()}>
-        {listening ? "음성 인식 중..." : "말하기"}
-      </button>
-      {/*<button onClick={SpeechRecognition.stopListening}>Stop</button>*/}
-      <p>질문: {finalTranscript}</p>
-    </div>
+    <ButtonBox>
+      <MicIcon
+        onClick={() => SpeechRecognition.startListening()}
+        sx={{
+          fontSize: 50,
+          color: 'white',
+          cursor: 'pointer',
+          backgroundColor: 'black',
+          borderRadius: '50%',
+          padding: '10px',
+        }}
+      />
+      <p>{listening ? '음성 인식 중...' : '말하기'}</p>
+      <p>{transcript}</p>
+    </ButtonBox>
   );
 };
 export default Dictaphone;

@@ -1,8 +1,8 @@
-import { ChatCompletionTool } from "openai/src/resources/chat/completions";
-import { searchTrainTool } from "@/constants/tools/searchTrainTool";
-import { reserveTrainTool } from "@/constants/tools/reserveTrainTool";
-import { saveTrainRouteTool } from "@/constants/tools/saveTrainRouteTool";
-import { saveDepartureTimeTool } from "@/constants/tools/saveDepartureTimeTool";
+import { ChatCompletionTool } from 'openai/src/resources/chat/completions';
+import { searchTrainTool } from '@/constants/tools/searchTrainTool';
+import { reserveTrainTool } from '@/constants/tools/reserveTrainTool';
+import { saveTrainRouteTool } from '@/constants/tools/saveTrainRouteTool';
+import { saveDepartureTimeTool } from '@/constants/tools/saveDepartureTimeTool';
 
 /**
  * TODO: 함수 호출 단계 세분화 필요

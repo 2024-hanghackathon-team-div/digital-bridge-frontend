@@ -24,14 +24,14 @@ export function parseFunctionCall(
 
     for (const toolUse of toolUses) {
       functionCalls.push({
-        functionName: toolUse.recipient_name.split(".").pop() || "",
+        functionName: toolUse.recipient_name.split('.').pop() || '',
         parameters: toolUse.parameters,
       });
     }
 
     return functionCalls;
   } catch (error) {
-    console.error("Error parsing data:", error);
+    console.error('Error parsing data:', error);
   }
 
   return null;
@@ -39,10 +39,10 @@ export function parseFunctionCall(
 
 // Example usage
 const jsonData: FunctionCallData = {
-  id: "call_ADNQaMVw0xwugAvrZQqTB93l",
-  type: "function",
+  id: 'call_ADNQaMVw0xwugAvrZQqTB93l',
+  type: 'function',
   function: {
-    name: "multi_tool_use",
+    name: 'multi_tool_use',
     arguments:
       '{"tool_uses":[{"recipient_name":"functions.saveTrainRoute","parameters":{"departure":"서울","destination":"부산"}}]}',
   },

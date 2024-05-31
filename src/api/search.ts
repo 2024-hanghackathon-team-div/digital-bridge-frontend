@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 import {
   SearchTrainRequestBody,
   SearchTrainResponse,
   TicketInfo,
-} from "@/constants/types";
+} from '@/constants/types';
 
 /**
  * 예매 가능한 열차를 조회하는 함수
@@ -12,10 +12,10 @@ import {
 export const searchTrainApi = async (
   data: SearchTrainRequestBody,
 ): Promise<TicketInfo | string> => {
-  const response = await axios.post<SearchTrainResponse[]>("/api/search", data);
+  const response = await axios.post<SearchTrainResponse[]>('/api/search', data);
 
   if (!response.data || response.data.length === 0) {
-    return "예매 가능한 열차가 없습니다.";
+    return '예매 가능한 열차가 없습니다.';
   }
 
   const t = response.data[0];

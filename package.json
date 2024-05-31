@@ -6,10 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write ."
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@google-cloud/speech": "^6.5.0",
+    "@mui/icons-material": "^5.15.19",
+    "@mui/material": "^5.15.19",
     "axios": "^1.6.8",
     "next": "14.2.3",
     "node-record-lpcm16": "^1.0.1",

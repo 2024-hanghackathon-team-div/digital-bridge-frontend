@@ -1,23 +1,23 @@
-import { ChatCompletionTool } from "openai/src/resources/chat/completions";
+import { ChatCompletionTool } from 'openai/src/resources/chat/completions';
 
 export const saveTrainRouteTool: ChatCompletionTool = {
-  type: "function",
+  type: 'function',
   function: {
-    name: "saveTrainRoute",
-    description: "기차 출발지와 도착지 정보를 저장하는 함수",
+    name: 'saveTrainRoute',
+    description: '기차 출발지와 도착지 정보를 저장하는 함수',
     parameters: {
-      type: "object",
+      type: 'object',
       properties: {
         departure: {
-          type: "string",
-          description: "출발지",
+          type: 'string',
+          description: '출발지',
         },
         destination: {
-          type: "string",
-          description: "도착지",
+          type: 'string',
+          description: '도착지',
         },
       },
-      required: ["departure", "destination"],
+      required: ['departure', 'destination'],
     },
   },
 };
