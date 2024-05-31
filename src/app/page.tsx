@@ -337,7 +337,7 @@ export default function Home() {
     formData.append('file', file, 'photo.jpg');
 
     axios
-      .post<CardInfo>('/api/extract_card_info', formData, {
+      .post<CardInfo>('http://localhost:8080/extract_card_info', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
