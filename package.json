@@ -1,5 +1,5 @@
 {
-  "name": "digital-bridge-frontend",
+  "name": "chat-gpt-poc",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,14 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/speech": "^6.5.0",
+    "axios": "^1.6.8",
     "next": "14.2.3",
+    "node-record-lpcm16": "^1.0.1",
+    "openai": "^4.40.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-speech-recognition": "^3.10.0",
+    "regenerator-runtime": "^0.14.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-speech-recognition": "^3.9.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "prettier": "3.2.5",
