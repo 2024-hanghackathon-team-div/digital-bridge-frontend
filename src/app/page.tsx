@@ -70,7 +70,7 @@ export default function Home() {
 
   // OpenAI 객체 생성
   const openai = new OpenAI({
-    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
 
