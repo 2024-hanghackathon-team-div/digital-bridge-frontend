@@ -349,49 +349,49 @@ export default function Home() {
       .catch(error => {
         console.error('Upload error', error);
       });
+  };
 
     return (
-      <main>
-        {currentStep === 1 && (
-          <Step1_DepartureDestination text={stepTexts[1]} />
-        )}
-        {currentStep === 2 && <Step2_DateTime text={stepTexts[2]} />}
-        {currentStep === 3 && <Step3_Reservation text={stepTexts[3]} />}
-        {currentStep === 4 && <Step4_Payment text={stepTexts[4]} />}
-        {currentStep === 5 && <Step5_OCR text={stepTexts[5]} />}
-        {/* <Loader isProcessing={isProcessing} /> */}
-        <Visualizer listening={isSpeaking} />
-        <Dictaphone
-          // onTranscriptChange={handleTranscriptChange}
-          onTranscriptChange={(newTranscript: string) =>
-            handleTranscriptChange(newTranscript)
-          }
-          onSpeakingChange={handleSpeakingChange}
-        />
-        <p style={{ marginTop: '20px' }}>응답: {answer}</p>
-        <ReservationConfirm
-          departure={departure}
-          destination={destination}
-          departureTime={departureTime}
-        />
-        <div>
-          <h1>Capture and Upload Photo</h1>
-          <CameraComponent onCapture={handleCapture} />
-          {photoURL && (
+        <main>
+            {currentStep === 1 && (
+                <Step1_DepartureDestination text={stepTexts[1]} />
+            )}
+            {currentStep === 2 && <Step2_DateTime text={stepTexts[2]} />}
+            {currentStep === 3 && <Step3_Reservation text={stepTexts[3]} />}
+            {currentStep === 4 && <Step4_Payment text={stepTexts[4]} />}
+            {currentStep === 5 && <Step5_OCR text={stepTexts[5]} />}
+            {/* <Loader isProcessing={isProcessing} /> */}
+            <Visualizer listening={isSpeaking} />
+            <Dictaphone
+                // onTranscriptChange={handleTranscriptChange}
+                onTranscriptChange={(newTranscript: string) =>
+                    handleTranscriptChange(newTranscript)
+                }
+                onSpeakingChange={handleSpeakingChange}
+            />
+            <p style={{ marginTop: '20px' }}>응답: {answer}</p>
+            <ReservationConfirm
+                departure={departure}
+                destination={destination}
+                departureTime={departureTime}
+            />
             <div>
-              <h2>Captured Photo:</h2>
-              <p>신용카드 번호: {cardInfo?.card_number}</p>
-              <p>CVC: {cardInfo?.cvc}</p>
-              <p>유효기간: {cardInfo?.expiry_date}</p>
-              <Image
-                src={photoURL}
-                alt='Captured'
-                style={{ width: '30%', height: 'auto' }}
-              />
+                <h1>Capture and Upload Photo</h1>
+                <CameraComponent onCapture={handleCapture} />
+                {photoURL && (
+                    <div>
+                        <h2>Captured Photo:</h2>
+                        <p>신용카드 번호: {cardInfo?.card_number}</p>
+                        <p>CVC: {cardInfo?.cvc}</p>
+                        <p>유효기간: {cardInfo?.expiry_date}</p>
+                        <Image
+                            src={photoURL}
+                            alt='Captured'
+                            style={{ width: '30%', height: 'auto' }}
+                        />
+                    </div>
+                )}
             </div>
-          )}
-        </div>
-      </main>
+        </main>
     );
-  };
 }
