@@ -13,6 +13,7 @@ import Step2_DateTime from '@/components/steps/Step2_DateTime';
 import Step3_Reservation from '@/components/steps/Step3_Reservation';
 import Step4_Payment from '@/components/steps/Step4_Payment';
 import Step5_OCR from '@/components/steps/Step5_OCR';
+import Visualizer from '@/components/speech-recognition/waveformgraph';
 
 export default function Home() {
   // Chat GPT 응답
@@ -323,6 +324,7 @@ export default function Home() {
       {currentStep === 3 && <Step3_Reservation text={stepTexts[3]} />}
       {currentStep === 4 && <Step4_Payment text={stepTexts[4]} />}
       {currentStep === 5 && <Step5_OCR text={stepTexts[5]} />}
+      <Visualizer listening={isSpeaking} />
       <Dictaphone
         // onTranscriptChange={handleTranscriptChange}
         onTranscriptChange={(newTranscript: string) =>
