@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ const Text = styled.p`
   font-weight: bold;
 `;
 
-function Step1_DepartureDestination({text}: {text: string[]}) {
+function Step1_Route({ text }: { text: string[] }) {
   return (
     <Container>
       <TextBox>
@@ -30,4 +30,4 @@ function Step1_DepartureDestination({text}: {text: string[]}) {
   );
 }
 
-export default Step1_DepartureDestination;
+export default Step1_Route;
