@@ -43,6 +43,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          args: NEXT_PUBLIC_OPENAI_API_KEY=${{ secrets.NEXT_PUBLIC_OPENAI_API_KEY }}
           tags:
             ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID
             }}/${{ secrets.GCP_REGISTRY_NAME }}/${{ secrets.DOCKER_IMAGE_NAME

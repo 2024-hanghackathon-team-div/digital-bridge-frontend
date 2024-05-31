@@ -66,6 +66,7 @@ EXPOSE 3000
 
 # 포트 환경 변수 설정
 ENV PORT 3000
+ENV NEXT_PUBLIC_OPENAI_API_KEY=${NEXT_PUBLIC_OPENAI_API_KEY}
 
 # 컨테이너가 시작될 떄 실행할 명령어 설정: next.js를 빌드한 결과물 중 하나인 server.js를 실행
 CMD HOSTNAME="0.0.0.0" node server.js
