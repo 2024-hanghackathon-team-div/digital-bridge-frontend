@@ -14,6 +14,15 @@ import Step3_Reservation from '@/components/steps/Step3_Reservation';
 import Step4_Payment from '@/components/steps/Step4_Payment';
 import Step5_OCR from '@/components/steps/Step5_OCR';
 import Visualizer from '@/components/speech-recognition/waveformgraph';
+import Loader from '@/components/loading';
+import styled from '@emotion/styled';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default function Home() {
   // Chat GPT 응답
@@ -45,6 +54,7 @@ export default function Home() {
     },
   ]);
   const [currentStep, setCurrentStep] = useState<number>(1);
+  // todo: isProcessing 상태 추가
 
   const stepTexts = {
     1: [
@@ -324,6 +334,7 @@ export default function Home() {
       {currentStep === 3 && <Step3_Reservation text={stepTexts[3]} />}
       {currentStep === 4 && <Step4_Payment text={stepTexts[4]} />}
       {currentStep === 5 && <Step5_OCR text={stepTexts[5]} />}
+      {/* <Loader isProcessing={isProcessing} /> */}
       <Visualizer listening={isSpeaking} />
       <Dictaphone
         // onTranscriptChange={handleTranscriptChange}
