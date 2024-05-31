@@ -8,6 +8,9 @@ RUN apk add --no-cache libc6-compat
 # 작업 디렉토리를 /app으로 설정
 WORKDIR /app
 
+ARG NEXT_PUBLIC_OPENAI_API_KEY
+ENV NEXT_PUBLIC_OPENAI_API_KEY=$NEXT_PUBLIC_OPENAI_API_KEY
+
 # 사용하는 패키지 매니저에 따라 의존성 설치
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
@@ -66,8 +69,6 @@ EXPOSE 3000
 
 # 포트 환경 변수 설정
 ENV PORT 3000
-ARG NEXT_PUBLIC_OPENAI_API_KEY
-ENV NEXT_PUBLIC_OPENAI_API_KEY=$NEXT_PUBLIC_OPENAI_API_KEY
 
 # 컨테이너가 시작될 떄 실행할 명령어 설정: next.js를 빌드한 결과물 중 하나인 server.js를 실행
 CMD HOSTNAME="0.0.0.0" node server.js
