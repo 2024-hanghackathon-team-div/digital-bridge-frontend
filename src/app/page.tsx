@@ -18,6 +18,7 @@ import TranscriptBox from '@/components/transcript';
 import Layout from '@/components/layout';
 import StartButton from '@/components/startbutton';
 import Step5_OCR from '@/components/steps/Step5_OCR';
+import { resolve } from 'path';
 
 interface CardInfo {
   card_number: string;
@@ -182,25 +183,6 @@ export default function Home() {
   const [photoURL, setPhotoURL] = useState<string | null>(null);
   const [cardInfo, setCardInfo] = useState<CardInfo>();
 
-  const handleCapture = (file: File) => {
-    const formData = new FormData();
-    formData.append('file', file, 'photo.jpg');
-
-    axios
-      .post<CardInfo>('http://localhost:8080/extract_card_info', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(response => {
-        setCardInfo(response.data);
-        setPhotoURL(URL.createObjectURL(file));
-      })
-      .catch(error => {
-        console.error('Upload error', error);
-      });
-  };
-
   const [isOnboard, setIsOnboard] = useState<boolean>(true);
   const handleStartButtonClick = () => {
     if (answer) streamResponse(answer, openai, setPlaying);
@@ -216,7 +198,7 @@ export default function Home() {
         setPlaying,
       );
     }
-  }, [openai, step]);
+  }, [step]);
 
   return (
     <main>

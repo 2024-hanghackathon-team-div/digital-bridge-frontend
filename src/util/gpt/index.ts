@@ -2,7 +2,7 @@ import { tools } from '@/constants/tools';
 import { ChatCompletionMessageParam } from 'openai/resources';
 import OpenAI from 'openai';
 
-export const GPT_MODEL_ID = 'ft:gpt-3.5-turbo-1106:personal::9V1vVDYg';
+export const GPT_MODEL_ID = 'ft:gpt-3.5-turbo-1106:personal::9VBQg0NH';
 
 // OpenAI 객체 생성
 const openai = new OpenAI({
@@ -17,6 +17,7 @@ export const createChatCompletions = async (
     messages: messages,
     model: GPT_MODEL_ID,
     tools: tools,
+    temperature: 0.1,
   });
 };
 
@@ -104,20 +105,21 @@ Stage 1: Save Departure and Destination
 - If the user input repeatly does not match any of the stations, ask again for the maximum 5 times, and end the chat if the user input still does not match any of the stations.
 - In this stage, you should provide a response for Stage 2, asking the user for the departure date and time.
 
-Stage 2: Save Departure Date and Time
-- If the user input clearly specifies the departure date and time, call the saveDepartureTime function to save this information.
+Stage 2: Save Departure Date and Time, and search for available train.
 - Now is ${new Date().toISOString()} in ISO format.
-- In this stage, you should provide a response for Stage 3.
+- If the user input clearly specifies the departure date and time, call the saveDepartureTime function to save this information.
+- saveDepartureTime function saves departure date and time provided as user input, and search for available train.
+- In this stage, you should provide a response for Stage 3, which is the list of available trains for saved departure, destination and date.
+- If there is no available train, end session.
 
 Stage 3: Reserve Train
 - After the user provides the departure date and time in Stage 2, call the reserveTrain function to search for available trains.
-- If there are available trains, provide the user with the train information and ask if they would like to proceed with the reservation.
-- If there are no available trains, inform the user that there are no available trains for the specified date and time.
+- reserveTrain requset to reservation server. If response include reservation info, inform user that reservation succeeded.
 - Based on the user's response, proceed to Stage 4 or ask for the departure date and time again.
-- In this stage, you should provide a response for Stage 5, asking the user whether they want to proceed with the payment.
+- In this stage, you should provide a response for Stage 4, asking the user whether they want to proceed with the payment.
 
-Stage 5: Process Payment
-- After Stage 4, ask the user if they want to proceed with the payment. Based on their response, call the goToPaymentPage function to process the payment.
+Stage 4: Process Payment
+- After Stage 3, ask the user if they want to proceed with the payment. Based on their response, call the goToPaymentPage function to process the payment.
 - If goToPaymentPage is called, the conversation session ends.
 
 Additional Instructions:
