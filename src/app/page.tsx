@@ -48,9 +48,9 @@ export default function Home() {
   // playing
   const [playing, setPlaying] = useState<boolean>(false);
   // 진행단계
-  const [step, setStep] = useState<'normal' | 'reservation' | 'payment'>(
-    'normal',
-  );
+  const [step, setStep] = useState<
+    'normal' | 'reservation' | 'payment' | 'end'
+  >('normal');
 
   // todo: isProcessing 상태 추가
   // todo: reservationConfirm 컴포넌트 props 변경(GPT search 응답)
@@ -175,7 +175,6 @@ export default function Home() {
   // 사용자가 말하는 게 중단되면 Chat GPT로 API 요청을 보냄
   useEffect(() => {
     if (!listening && finalTranscript) {
-      console.log('finalTranscript:', finalTranscript);
       askChatGpt();
     }
   }, [listening, finalTranscript]);
@@ -208,6 +207,17 @@ export default function Home() {
     setIsOnboard(false);
   };
 
+  useEffect(() => {
+    if (step === 'end') {
+      setAnswer('열차 예매가 완료되었습니다. 즐거운 여행 되세요');
+      streamResponse(
+        '열차 예매가 완료되었습니다. 즐거운 여행 되세요',
+        openai,
+        setPlaying,
+      );
+    }
+  }, [openai, step]);
+
   return (
     <main>
       <Layout>
@@ -225,15 +235,11 @@ export default function Home() {
                 destinationTime={destinationTime}
               />
             )}
-            {step === 'payment' && <Step5_OCR />}
+            {step === 'payment' && (
+              <Step5_OCR changeStep={() => setStep('end')} />
+            )}
           </>
         )}
-        {/*{currentStep === 1 && <Step1_Route text={stepTexts[1]} />}*/}
-        {/*{currentStep === 2 && <Step2_DateTime text={stepTexts[2]} />}*/}
-        {/*{currentStep === 3 && <Step3_Reservation text={stepTexts[3]} />}*/}
-        {/*{currentStep === 4 && <Step4_Payment text={stepTexts[4]} />}*/}
-        {/*{currentStep === 5 && <Step5_OCR text={stepTexts[5]} />}*/}
-        {/*<Loader isProcessing={isProcessing} />*/}
         <Visualizer listening={listening} />
         <Dictaphone
           transcript={transcript}

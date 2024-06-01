@@ -23,7 +23,11 @@ const Text = styled.p`
   font-weight: bold;
 `;
 
-function Step5_OCR() {
+interface Props {
+  changeStep: () => void;
+}
+
+function Step5_OCR({ changeStep }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [process, setProcess] = useState<'ocr' | 'payment'>('ocr');
 
@@ -33,8 +37,9 @@ function Step5_OCR() {
     const cardInfo = await readCardInfoApi(blob);
     cardInfo.card_number = cardInfo.card_number.replaceAll(' ', '');
     setProcess('payment');
-    return await paymentApi(cardInfo);
+    await paymentApi(cardInfo);
     setIsLoading(false);
+    changeStep();
   };
 
   return (
