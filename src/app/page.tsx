@@ -16,6 +16,7 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import TranscriptBox from '@/components/transcript';
 import Layout from '@/components/layout';
+import StartButton from '@/components/startbutton';
 
 interface CardInfo {
   card_number: string;
@@ -23,11 +24,11 @@ interface CardInfo {
   expiry_date: string;
 }
 
+const GREETING_MESSAGE = '안녕하세요. 어디에서 어디로 가는 열차를 찾으시나요?';
+
 export default function Home() {
   // Chat GPT 응답
-  const [answer, setAnswer] = useState<string | null>(
-    '안녕하세요. 어디에서 어디로 가는 열차를 찾으시나요?',
-  );
+  const [answer, setAnswer] = useState<string | null>(GREETING_MESSAGE);
 
   // 출발지
   const [departure, setDeparture] = useState<string>('');
@@ -41,6 +42,8 @@ export default function Home() {
   const [messages] = useState<ChatCompletionMessageParam[]>(DEFAULT_MESSAGES);
   // Dictphone
   const { transcript, finalTranscript, listening } = useSpeechRecognition();
+  // playing
+  const [playing, setPlaying] = useState<boolean>(false);
   // todo: isProcessing 상태 추가
   // todo: reservationConfirm 컴포넌트 props 변경(GPT search 응답)
 
@@ -49,54 +52,6 @@ export default function Home() {
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
-
-  //   const sendGreetingMessage = async () => {
-  //     try {
-  //       const response = await openai.audio.speech.create({
-  //         model: 'tts-1',
-  //         voice: 'fable',
-  //         input: '안녕하세요. 어디에서 어디로 가는 열차를 찾으시나요?',
-  //         speed: 1.2,
-  //       });
-
-  //       const reader = response?.body?.getReader();
-  //       if (reader) {
-  //         const stream = new ReadableStream({
-  //           start(controller) {
-  //             function push() {
-  //               reader.read().then(({ done, value }) => {
-  //                 if (done) {
-  //                   controller.close();
-  //                   return;
-  //                 }
-  //                 controller.enqueue(value);
-  //                 push();
-  //               });
-  //             }
-
-  //             push();
-  //           },
-  //         });
-
-  //         const audioBlob = await new Response(stream).blob();
-  //         const audioUrl = URL.createObjectURL(audioBlob);
-  //         const audio = new Audio(audioUrl);
-  //         audio.play();
-  //       }
-  //     } catch (error) {
-  //       console.error('Error sending greeting message:', error);
-  //     }
-  //   };
-
-  //   // 컴포넌트가 처음 마운트될 때 실행되는 useEffect
-  //   useEffect(() => {
-  //     const playGreetingMessage = async () => {
-  //       await sendGreetingMessage();
-  //       // audio.play();
-  //     };
-
-  //     playGreetingMessage();
-  //   }, []);
 
   // Chat GPT에게 질문하는 함수
   async function askChatGpt() {
@@ -111,7 +66,7 @@ export default function Home() {
     const responseMessage = response.choices[0].message;
     setAnswer(responseMessage?.content);
     if (responseMessage?.content) {
-      await streamResponse(responseMessage?.content, openai);
+      await streamResponse(responseMessage?.content, openai, setPlaying);
     }
 
     // Chat GPT의 응답이 Function Calling인 경우
@@ -197,12 +152,10 @@ export default function Home() {
         }
 
         const fnResponse = await createChatCompletions(messages);
-        setAnswer(fnResponse?.choices[0]?.message?.content);
-        if (fnResponse?.choices[0]?.message?.content) {
-          await streamResponse(
-            fnResponse?.choices[0]?.message?.content,
-            openai,
-          );
+        const fnAnswer = fnResponse?.choices[0]?.message?.content;
+        setAnswer(fnAnswer);
+        if (fnAnswer) {
+          await streamResponse(fnAnswer, openai, setPlaying);
         }
       }
     }
@@ -238,11 +191,20 @@ export default function Home() {
       });
   };
 
+  const [isOnboard, setIsOnboard] = useState<boolean>(true);
+  const handleStartButtonClick = () => {
+    if (answer) streamResponse(answer, openai, setPlaying);
+    setIsOnboard(false);
+  };
+
   return (
     <main>
       <Layout>
-        {/* <button onClick={sendGreetingMessage}>재생</button> */}
-        <TranscriptBox>{listening ? transcript : answer ?? ''}</TranscriptBox>
+        {isOnboard ? (
+          <StartButton onClick={handleStartButtonClick} />
+        ) : (
+          <TranscriptBox content={listening ? transcript : answer ?? ''} />
+        )}
         {/*{currentStep === 1 && <Step1_Route text={stepTexts[1]} />}*/}
         {/*{currentStep === 2 && <Step2_DateTime text={stepTexts[2]} />}*/}
         {/*{currentStep === 3 && <Step3_Reservation text={stepTexts[3]} />}*/}
@@ -253,6 +215,7 @@ export default function Home() {
         <Dictaphone
           transcript={transcript}
           listening={listening}
+          disabled={listening || isOnboard || playing} // TODO: isProcessing
           onClick={() => {
             setAnswer('');
             SpeechRecognition.startListening();
@@ -269,43 +232,53 @@ export default function Home() {
   );
 }
 
-async function streamResponse(answer: string, openai: OpenAI) {
-  if (answer) {
-    const response = await openai.audio.speech.create({
-      model: 'tts-1',
-      voice: 'fable',
-      input: answer,
+async function streamResponse(
+  answer: string,
+  openai: OpenAI,
+  setPlaying: (playing: boolean) => void,
+) {
+  if (answer === undefined) {
+    return;
+  }
+
+  setPlaying(true);
+
+  const response = await openai.audio.speech.create({
+    model: 'tts-1',
+    voice: 'fable',
+    input: answer,
+  });
+
+  const reader = response?.body?.getReader();
+  if (reader) {
+    const stream = new ReadableStream({
+      start(controller) {
+        function push() {
+          reader.read().then(({ done, value }) => {
+            if (done) {
+              controller.close();
+              return;
+            }
+            controller.enqueue(value);
+            push();
+          });
+        }
+        push();
+      },
     });
 
-    const reader = response?.body?.getReader();
-
-    if (reader === undefined || reader === null) {
-      return;
-    }
-    if (reader) {
-      const stream = new ReadableStream({
-        start(controller) {
-          function push() {
-            reader.read().then(({ done, value }) => {
-              if (done) {
-                controller.close();
-                return;
-              }
-              controller.enqueue(value);
-              push();
-            });
-          }
-
-          push();
+    const audioBlob = await new Response(stream).blob();
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+    audio.playbackRate = 1.1;
+    console.log('answer:', answer);
+    audio.play().then(() => {
+      setTimeout(
+        () => {
+          setPlaying(false);
         },
-      });
-
-      const audioBlob = await new Response(stream).blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-      audio.playbackRate = 1.1;
-      console.log('answer:', answer);
-      audio.play();
-    }
+        1000 * (audio.duration + 1),
+      );
+    });
   }
 }

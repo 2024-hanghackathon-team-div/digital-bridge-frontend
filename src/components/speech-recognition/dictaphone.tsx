@@ -18,18 +18,24 @@ interface Props {
   transcript: string;
   listening: boolean;
   onClick: () => void | Promise<void>;
+  disabled: boolean;
 }
 
-export const Dictaphone = ({ transcript, listening, onClick }: Props) => {
+export const Dictaphone = ({
+  transcript,
+  listening,
+  onClick,
+  disabled,
+}: Props) => {
   return (
     <ButtonBox>
       <MicIcon
-        onClick={onClick}
+        onClick={disabled ? undefined : onClick}
         sx={{
           fontSize: 50,
           color: 'white',
           cursor: 'pointer',
-          backgroundColor: 'black',
+          backgroundColor: disabled ? 'gray' : 'black',
           borderRadius: '50%',
           padding: '10px',
         }}
