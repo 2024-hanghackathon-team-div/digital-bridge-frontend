@@ -1,7 +1,7 @@
 'use client';
 import 'regenerator-runtime/runtime';
 import OpenAI from 'openai';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChatCompletionMessageParam } from 'openai/resources';
 import { searchTrainApi } from '@/api/search';
 import { reserveTrainApi } from '@/api/reservation';
@@ -17,6 +17,7 @@ import SpeechRecognition, {
 import TranscriptBox from '@/components/transcript';
 import Layout from '@/components/layout';
 import StartButton from '@/components/startbutton';
+import Step5_OCR from '@/components/steps/Step5_OCR';
 
 interface CardInfo {
   card_number: string;
@@ -44,6 +45,11 @@ export default function Home() {
   const { transcript, finalTranscript, listening } = useSpeechRecognition();
   // playing
   const [playing, setPlaying] = useState<boolean>(false);
+  // 진행단계
+  const [step, setStep] = useState<'normal' | 'reservation' | 'payment'>(
+    'normal',
+  );
+
   // todo: isProcessing 상태 추가
   // todo: reservationConfirm 컴포넌트 props 변경(GPT search 응답)
 
@@ -103,19 +109,18 @@ export default function Home() {
                 ? parameters.date.toString().padStart(2, '0')
                 : new Date().getDate().toString().padStart(2, '0');
 
-
             const ticket = await searchTrainApi({
               date: `${year}${month}${date}`,
               time: parameters.time,
               destination: destination,
               departure: departure,
             });
-            
+
             if (!ticket) {
               console.error('No ticket found');
               return;
             }
-          
+
             if (ticket.departureDate) {
               const reservYear = ticket.departureDate.slice(0, 4);
               const reservMonth = ticket.departureDate.slice(4, 6);
@@ -134,6 +139,7 @@ export default function Home() {
             });
             break;
           case 'reserveTrain':
+            setStep('reservation');
             const result = await reserveTrainApi({
               departure: departure,
               destination: destination,
@@ -147,6 +153,8 @@ export default function Home() {
               content: JSON.stringify(result),
             });
             break;
+          case 'goToPaymentPage':
+            setStep('payment');
           default:
             break;
         }
@@ -203,7 +211,18 @@ export default function Home() {
         {isOnboard ? (
           <StartButton onClick={handleStartButtonClick} />
         ) : (
-          <TranscriptBox content={listening ? transcript : answer ?? ''} />
+          <>
+            <TranscriptBox content={listening ? transcript : answer ?? ''} />
+            {step === 'reservation' && (
+              <ReservationConfirm
+                departure={departure}
+                destination={destination}
+                departureTime={departureTime}
+                departureDate={departureDate}
+              />
+            )}
+            {step === 'payment' && <Step5_OCR />}
+          </>
         )}
         {/*{currentStep === 1 && <Step1_Route text={stepTexts[1]} />}*/}
         {/*{currentStep === 2 && <Step2_DateTime text={stepTexts[2]} />}*/}
@@ -222,12 +241,6 @@ export default function Home() {
           }}
         />
       </Layout>
-      <ReservationConfirm
-        departure={departure}
-        destination={destination}
-        departureTime={departureTime}
-        departureDate={departureDate}
-      />
     </main>
   );
 }
