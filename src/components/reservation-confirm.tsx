@@ -50,8 +50,8 @@ const ReservationConfirm = ({
       return undefined;
     }
     return {
-      month: departureDate.slice(2, 4),
-      date: departureDate.slice(4, 6),
+      month: departureDate.slice(4, 6),
+      date: departureDate.slice(6, 8),
     };
   };
   const parsedDepartureDate = getParsedDepartureDate(departureDate);

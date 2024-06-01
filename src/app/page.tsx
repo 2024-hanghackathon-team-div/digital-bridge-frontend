@@ -162,9 +162,9 @@ export default function Home() {
             }
           
             if (ticket.departureDate) {
-              const reservYear = ticket.departureDate.slice(0, 2);
-              const reservMonth = ticket.departureDate.slice(2, 4);
-              const reservDate = ticket.departureDate.slice(4, 6);
+              const reservYear = ticket.departureDate.slice(0, 4);
+              const reservMonth = ticket.departureDate.slice(4, 6);
+              const reservDate = ticket.departureDate.slice(6, 8);
               setDepartureDate(`${reservYear}${reservMonth}${reservDate}`);
             } else {
               setDepartureDate(`${year}${month}${date}`);
