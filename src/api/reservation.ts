@@ -10,7 +10,7 @@ import {
  */
 export const reserveTrainApi = async (data: ReserveTrainRequestBody) => {
   const response = await axios.post<ReserveTrainResponse>(
-    'http://localhost:8080/reservation',
+    'api/reservation',
     data,
   );
 

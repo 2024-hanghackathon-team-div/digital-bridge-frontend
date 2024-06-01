@@ -12,7 +12,7 @@ import {
 export const searchTrainApi = async (
   data: SearchTrainRequestBody,
 ): Promise<TicketInfo | undefined> => {
-  const response = await axios.post<SearchTrainResponse[]>('http://localhost:8080/search', data);
+  const response = await axios.post<SearchTrainResponse[]>('api/search', data);
 
   if (!response.data || response.data.length === 0) {
     return undefined;
