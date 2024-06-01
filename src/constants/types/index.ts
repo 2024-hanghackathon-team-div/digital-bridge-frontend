@@ -71,3 +71,10 @@ export interface ReserveTrainResponse {
   journey_cnt: string;
   rsv_chg_no: string;
 }
+
+export interface CardInfo {
+  card_number: string;
+  expiration_year: string;
+  expiration_month: string;
+  cvc: string;
+}
