@@ -148,7 +148,6 @@ export default function Home() {
                 ? parameters.date.toString().padStart(2, '0')
                 : new Date().getDate().toString().padStart(2, '0');
 
-            setDepartureDate(`${year}${month}${date}`);
 
             const ticket = await searchTrainApi({
               date: `${year}${month}${date}`,
@@ -156,6 +155,20 @@ export default function Home() {
               destination: destination,
               departure: departure,
             });
+            
+            if (!ticket) {
+              console.error('No ticket found');
+              return;
+            }
+          
+            if (ticket.departureDate) {
+              const reservYear = ticket.departureDate.slice(0, 2);
+              const reservMonth = ticket.departureDate.slice(2, 4);
+              const reservDate = ticket.departureDate.slice(4, 6);
+              setDepartureDate(`${reservYear}${reservMonth}${reservDate}`);
+            } else {
+              setDepartureDate(`${year}${month}${date}`);
+            }
 
             setDepartureTime(ticket.departureTime);
             messages.push({
@@ -250,6 +263,7 @@ export default function Home() {
         departure={departure}
         destination={destination}
         departureTime={departureTime}
+        departureDate={departureDate}
       />
     </main>
   );

@@ -1,6 +1,5 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
-
 
 const ReservationsContainer = styled.div`
   display: flex;
@@ -25,15 +24,45 @@ const Reservation = styled.div`
   border-radius: 10px;
 `;
 
+const ReservationDateWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
+`;
+
 interface Props {
   departure: string;
   destination: string;
   departureTime: string;
+  departureDate: string;
 }
 
-const ReservationConfirm = ({departure, destination, departureTime}:Props) => {
+const ReservationConfirm = ({
+  departure,
+  destination,
+  departureTime,
+  departureDate,
+}: Props) => {
+  const getParsedDepartureDate = (departureDate: string) => {
+    if (!departureDate) {
+      return undefined;
+    }
+    return {
+      month: departureDate.slice(2, 4),
+      date: departureDate.slice(4, 6),
+    };
+  };
+  const parsedDepartureDate = getParsedDepartureDate(departureDate);
   return (
-    <ReservationsContainer>
+    <>
+      <ReservationDateWrapper hidden={!parsedDepartureDate}>
+        {parsedDepartureDate
+          ? `${parsedDepartureDate.month}월 ${parsedDepartureDate.date}일`
+          : ''}
+      </ReservationDateWrapper>
+      <ReservationsContainer>
         <Reservation>
           <p>출발지 {departure}</p>
           <p>출발 시간 {departureTime}</p>
@@ -44,7 +73,8 @@ const ReservationConfirm = ({departure, destination, departureTime}:Props) => {
           <p>도착 시간 {departureTime}</p>
         </Reservation>
       </ReservationsContainer>
+    </>
   );
-}
+};
 
 export default ReservationConfirm;

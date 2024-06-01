@@ -11,11 +11,11 @@ import {
  */
 export const searchTrainApi = async (
   data: SearchTrainRequestBody,
-): Promise<TicketInfo | string> => {
+): Promise<TicketInfo | undefined> => {
   const response = await axios.post<SearchTrainResponse[]>('http://localhost:8080/search', data);
 
   if (!response.data || response.data.length === 0) {
-    return '예매 가능한 열차가 없습니다.';
+    return undefined;
   }
 
   const t = response.data[0];
