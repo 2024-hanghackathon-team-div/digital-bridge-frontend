@@ -25,6 +25,7 @@ export const searchTrainApi = async (
     destination: t.arr_name,
     departureDate: t.dep_date,
     departureTime: t.dep_time,
+    destinationTime: t.arr_time,
     price: t.reserve_possible_name,
   };
 };

@@ -39,6 +39,7 @@ export interface TicketInfo {
   destination: string;
   departureDate: string;
   departureTime: string;
+  destinationTime: string;
   price: string;
 }
 

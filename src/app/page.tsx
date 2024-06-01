@@ -133,6 +133,7 @@ export default function Home() {
             }
 
             setDepartureTime(ticket.departureTime);
+            setDestinationTime(ticket.destinationTime);
             messages.push({
               tool_call_id: toolCall.id,
               role: 'tool',
@@ -221,6 +222,7 @@ export default function Home() {
                 destination={destination}
                 departureTime={departureTime}
                 departureDate={departureDate}
+                destinationTime={destinationTime}
               />
             )}
             {step === 'payment' && <Step5_OCR />}

@@ -79,7 +79,7 @@ const ReservationConfirm = ({
             출발지 <span>{departure}</span>
           </p>
           <p>
-            출발 시간 <span>{departureTime}</span>
+            출발 시간 <span>{parseTimeString(departureTime)}</span>
           </p>
         </Reservation>
         <TrendingFlatIcon
@@ -90,12 +90,18 @@ const ReservationConfirm = ({
             도착지 <span>{destination}</span>
           </p>
           <p>
-            도착 시간 <span>{destinationTime}</span>
+            도착 시간 <span>{parseTimeString(destinationTime)}</span>
           </p>
         </Reservation>
       </ReservationsContainer>
     </div>
   );
+};
+
+const parseTimeString = (time: string) => {
+  const hour = time.slice(0, 2);
+  const minute = time.slice(2, 4);
+  return `${hour}시 ${minute}분`;
 };
 
 export default ReservationConfirm;
