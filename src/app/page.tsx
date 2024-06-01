@@ -39,6 +39,8 @@ export default function Home() {
   const [departureDate, setDepartureDate] = useState<string>('');
   // 출발시간 (hhmmss)
   const [departureTime, setDepartureTime] = useState<string>('');
+  // 도착시간 (hhmmss)
+  const [destinationTime, setDestinationTime] = useState<string>('');
   // 대화 내역
   const [messages] = useState<ChatCompletionMessageParam[]>(DEFAULT_MESSAGES);
   // Dictphone
@@ -230,6 +232,13 @@ export default function Home() {
         {/*{currentStep === 4 && <Step4_Payment text={stepTexts[4]} />}*/}
         {/*{currentStep === 5 && <Step5_OCR text={stepTexts[5]} />}*/}
         {/*<Loader isProcessing={isProcessing} />*/}
+        <ReservationConfirm
+          departure={departure}
+          destination={destination}
+          departureTime={departureTime}
+          departureDate={departureDate}
+          destinationTime={destinationTime}
+        />
         <Visualizer listening={listening} />
         <Dictaphone
           transcript={transcript}
