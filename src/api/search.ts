@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
   SearchTrainRequestBody,
   SearchTrainResponse,
-  TicketInfo,
+  CustomSearchTrainResponse,
 } from '@/constants/types';
 
 /**
@@ -11,7 +11,7 @@ import {
  */
 export const searchTrainApi = async (
   data: SearchTrainRequestBody,
-): Promise<TicketInfo | undefined> => {
+): Promise<CustomSearchTrainResponse | undefined> => {
   const response = await axios.post<SearchTrainResponse[]>('api/search', data);
 
   if (!response.data || response.data.length === 0) {
@@ -21,6 +21,7 @@ export const searchTrainApi = async (
   const t = response.data[0];
 
   return {
+    status: '열차 조회 성공',
     departure: t.dep_name,
     destination: t.arr_name,
     departureDate: t.dep_date,

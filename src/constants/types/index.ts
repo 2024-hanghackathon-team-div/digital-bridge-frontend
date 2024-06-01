@@ -34,7 +34,8 @@ export interface ReserveTrainRequestBody {
   time: string;
 }
 
-export interface TicketInfo {
+export interface CustomSearchTrainResponse {
+  status: string;
   departure: string;
   destination: string;
   departureDate: string;
@@ -71,6 +72,11 @@ export interface ReserveTrainResponse {
   journey_no: string;
   journey_cnt: string;
   rsv_chg_no: string;
+}
+
+export interface CustomReserveTrainResponse {
+  status: string;
+  price: number;
 }
 
 export interface CardInfo {
