@@ -10,7 +10,7 @@ const CanvasContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 200px;
+  height: 150px;
 `;
 
 const Visualizer: React.FC<Props> = ({ listening }) => {
@@ -112,7 +112,6 @@ const Visualizer: React.FC<Props> = ({ listening }) => {
         }}
       />
     </CanvasContainer>
-    
   );
 };
 

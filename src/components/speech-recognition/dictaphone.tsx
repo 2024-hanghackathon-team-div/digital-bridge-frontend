@@ -11,31 +11,20 @@ const ButtonBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  padding: 40px 0px;
 `;
 
 interface Props {
-  onTranscriptChange: (transcript: string) => void;
-  onSpeakingChange: (status: boolean) => void;
+  transcript: string;
+  listening: boolean;
+  onClick: () => void | Promise<void>;
 }
 
-const Dictaphone = ({ onTranscriptChange, onSpeakingChange }: Props) => {
-  const { finalTranscript, transcript, listening } = useSpeechRecognition();
-
-  // 인식된 음성
-  useEffect(() => {
-    onTranscriptChange(finalTranscript);
-  }, [onTranscriptChange, finalTranscript]);
-
-  // 현재 사용자가 말하고 있는지 여부
-  useEffect(() => {
-    onSpeakingChange(listening);
-  }, [onSpeakingChange, listening]);
-
+export const Dictaphone = ({ transcript, listening, onClick }: Props) => {
   return (
     <ButtonBox>
       <MicIcon
-        onClick={() => SpeechRecognition.startListening()}
+        onClick={onClick}
         sx={{
           fontSize: 50,
           color: 'white',
@@ -46,8 +35,8 @@ const Dictaphone = ({ onTranscriptChange, onSpeakingChange }: Props) => {
         }}
       />
       <p>{listening ? '음성 인식 중...' : '말하기'}</p>
-      <p>{transcript}</p>
     </ButtonBox>
   );
 };
+
 export default Dictaphone;

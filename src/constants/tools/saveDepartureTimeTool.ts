@@ -21,7 +21,7 @@ export const saveDepartureTimeTool: ChatCompletionTool = {
           description: '출발 시간 (format: hhmmss)',
         },
       },
-      required: ['time'],
+      required: ['time', 'date', 'month'],
     },
   },
 };
