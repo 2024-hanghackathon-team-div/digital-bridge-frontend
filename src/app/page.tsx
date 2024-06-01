@@ -232,13 +232,6 @@ export default function Home() {
         {/*{currentStep === 4 && <Step4_Payment text={stepTexts[4]} />}*/}
         {/*{currentStep === 5 && <Step5_OCR text={stepTexts[5]} />}*/}
         {/*<Loader isProcessing={isProcessing} />*/}
-        <ReservationConfirm
-          departure={departure}
-          destination={destination}
-          departureTime={departureTime}
-          departureDate={departureDate}
-          destinationTime={destinationTime}
-        />
         <Visualizer listening={listening} />
         <Dictaphone
           transcript={transcript}
